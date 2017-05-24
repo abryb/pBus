@@ -29,6 +29,11 @@ class Station
     private $name;
 
     /**
+     * @ORM\Column(name="code", type="integer")
+     */
+    private $code;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Course", mappedBy="departure")
      */
     private $departures;
@@ -145,5 +150,28 @@ class Station
     public function getArrivals()
     {
         return $this->arrivals;
+    }
+
+    /**
+     * Set code
+     *
+     * @param integer $code
+     * @return Station
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return integer 
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 }
