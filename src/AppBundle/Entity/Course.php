@@ -24,14 +24,18 @@ class Course
     /**
      * @var string
      *
-     * @ORM\Column(name="Departure", type="string", length=255)
+     * @ORM\Column(name="Departure", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station", inversedBy="departures")
+     * @ORM\JoinColumn(name="station_id", referencedColumnName="id")
      */
     private $departure;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Destination", type="string", length=255)
+     * @ORM\Column(name="Destination", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station", inversedBy="arrivals")
+     * @ORM\JoinColumn(name="station_id", referencedColumnName="id")
      */
     private $destination;
 
