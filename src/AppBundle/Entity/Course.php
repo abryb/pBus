@@ -22,7 +22,7 @@ class Course
     private $id;
 
     /**
-     * @var string
+     * @var \AppBundle\Entity\Station $departure
      *
      * @ORM\Column(name="Departure", type="integer")
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station", inversedBy="departures")
@@ -31,7 +31,7 @@ class Course
     private $departure;
 
     /**
-     * @var string
+     * @var \AppBundle\Entity\Station $destination
      *
      * @ORM\Column(name="Destination", type="integer")
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station", inversedBy="arrivals")
@@ -74,7 +74,7 @@ class Course
     /**
      * Set departure
      *
-     * @param string $departure
+     * @param \AppBundle\Entity\Station $departure
      * @return Course
      */
     public function setDeparture($departure)
@@ -87,7 +87,7 @@ class Course
     /**
      * Get departure
      *
-     * @return string 
+     * @return \AppBundle\Entity\Station $departure
      */
     public function getDeparture()
     {
@@ -97,7 +97,7 @@ class Course
     /**
      * Set destination
      *
-     * @param string $destination
+     * @param \AppBundle\Entity\Station $destination
      * @return Course
      */
     public function setDestination($destination)
@@ -110,7 +110,7 @@ class Course
     /**
      * Get destination
      *
-     * @return string 
+     * @return \AppBundle\Entity\Station $destination
      */
     public function getDestination()
     {
