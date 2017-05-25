@@ -117,24 +117,6 @@ class PBRequest
         $this->data['PricingForm.RetDate'] = $date->format(PBRequest::DATE_FORMAT);
     }
 
-    public function sendOne()
-    {
-        $curl = $this->curl;
-        $curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
-        $curl->post('https://booking.polskibus.com/Pricing/GetPrice', array(
-            'PricingForm.Adults' => '1',
-            'PricingForm.FromCity' => '29',
-            'PricingForm.ToCity' => '2',
-            'PricingForm.OutDate' => '23/06/2017',
-            'PricingForm.RetDate' => '24/06/2017',
-        ));
-        if ($curl->error) {
-            echo 'Error: ' . $curl->errorCode . ': ' . $curl->errorMessage . "\n";
-        } else {
-            return $curl->response;
-        }
-    }
-
     /**
      * @return \AppBundle\Entity\Station $departure
      */
