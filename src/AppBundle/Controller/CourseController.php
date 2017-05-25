@@ -19,12 +19,17 @@ class CourseController extends Controller
      */
     public function indexAction()
     {
-        $destination = new Station();
-        $departure = new Station();
-        $pbrequest = new PBRequest();
-        $pbrequest->setDeparture($departure);
-        $pbrequest->setDestination($destination);
-        return new Response(var_dump($pbrequest));
+        $em = $this->getDoctrine()->getManager();
+
+        $destination = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 2]);
+        $departure = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 29]);
+
+        $dates = [new \DateTime()];
+
+        $pbrequest = new PBRequest($departure, $destination, $dates);
+        $result = $pbrequest->send();
+
+        return new Response(var_dump($result));
     }
 
 }
