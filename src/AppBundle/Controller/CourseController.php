@@ -32,7 +32,7 @@ class CourseController extends Controller
         $dbupdater = new DBUpdater();
         $result = $dbupdater->updateConnection($departure, $destination);
 
-        return new Response($result[0]);
+        return new Response($result[0] . $result[1]);
     }
 
 }

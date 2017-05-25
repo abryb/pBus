@@ -8,6 +8,16 @@ use PHPHtmlParser\Dom;
 
 class DBUpdater
 {
+    /**
+     * @var Dom
+     */
+    private $dom;
+
+    public function __construct()
+    {
+        $this->dom = new Dom;
+    }
+
     public function updateConnection(Station $departure, Station $destination)
     {
         $dates = new \DateTime();
@@ -16,12 +26,46 @@ class DBUpdater
         $pbrequest = new PBRequest($departure, $destination, $dates);
 
         $responses =  $pbrequest->send();
-        $dom = new Dom;
-        $onb_resultRows = [];
-        foreach ($responses as $respons) {
-            $dom->loadStr($respons, []);
-            $onb_resultRows[] = $dom->find('.onb_resultRow');
+
+        foreach ($responses as $response) {
+            $this->parseResponse($response);
         }
-        return $onb_resultRows;
+    }
+
+    private function splitResponseToCourses($response)
+    {
+        $dom = $this->dom;
+        $dom->load($response);
+        // Find form containing data
+        $form = $dom->find('form');
+        //Array of html with single course
+        $htmlCourses = $form->find('.onb_resultRow');
+        foreach ($htmlCourses as $htmlCourse) {
+            $datesHtml = $htmlCourse->find('.onb_two');
+            $departureDateString = $datesHtml->find('p')[0]->find('b')->text();
+            $arrivalDateString = $datesHtml->find('p')[1]->find('b')->text();
+
+            $durationHtml = $htmlCourse->find('.onb_three');
+            $hoursString = $durationHtml->find('p')[0]->firstChild()->text();
+            $minutesString = $durationHtml->find('p')[1]->firstChild()->text();
+
+            $priceString = $htmlCourse->find('.priceHilite')->text();
+        }
+    }
+
+    private function getDataFromCourses($htmlCourse)
+    {
+        $dom = $this->dom;
+        $dom->load($htmlCourse);
+
+        $datesHtml = $htmlCourse->find('.onb_two');
+        $departureDateString = $datesHtml->find('p')[0]->find('b')->text();
+        $arrivalDateString = $datesHtml->find('p')[1]->find('b')->text();
+
+        $durationHtml = $htmlCourse->find('.onb_three');
+        $hoursString = $durationHtml->find('p')[0]->firstChild()->text();
+        $minutesString = $durationHtml->find('p')[1]->firstChild()->text();
+
+        $priceString = $htmlCourse->find('.priceHilite')->text();
     }
 }
