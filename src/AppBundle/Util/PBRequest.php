@@ -45,11 +45,16 @@ class PBRequest
      */
     public function __construct(Station $departure, Station $destination, $dates)
     {
+        //create multi_curl and set url
         $this->multi_curl = new MultiCurl(PBRequest::URL);
         // setDeparture and setDestination also sets data departureCode and destinationCode
         $this->setDeparture($departure);
         $this->setDestination($destination);
-        $this->dates = $dates;
+        if (!is_array($dates)) {
+            $this->dates = [$dates];
+        } else {
+            $this->dates = $dates;
+        }
     }
 
     public function send()
