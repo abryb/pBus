@@ -4,6 +4,7 @@ namespace AppBundle\Util;
 
 use AppBundle\Util\PBRequest;
 use AppBundle\Entity\Station;
+use PHPHtmlParser\Dom;
 
 class DBUpdater
 {
@@ -11,7 +12,16 @@ class DBUpdater
     {
         $dates = new \DateTime();
         $dates->modify('+20 days');
+
         $pbrequest = new PBRequest($departure, $destination, $dates);
-        return $pbrequest->send();
+
+        $responses =  $pbrequest->send();
+        $dom = new Dom;
+        $onb_resultRows = [];
+        foreach ($responses as $respons) {
+            $dom->loadStr($respons, []);
+            $onb_resultRows[] = $dom->find('.onb_resultRow');
+        }
+        return $onb_resultRows;
     }
 }
