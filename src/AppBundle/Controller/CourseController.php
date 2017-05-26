@@ -4,11 +4,8 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-//use AppBundle\Util\PBRequest;
-use AppBundle\Util\DBUpdater;
+use AppBundle\Util\PolskiBus\CourseUpdater;
 use Symfony\Component\HttpFoundation\Response;
-//use AppBundle\Entity\Course;
-//use AppBundle\Entity\Station;
 
 class CourseController extends Controller
 {
@@ -24,15 +21,11 @@ class CourseController extends Controller
 
         $destination = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 2]);
         $departure = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 29]);
-        $dates = [new \DateTime()];
 
-//        $pbrequest = new PBRequest($departure, $destination, $dates);
-//        $result = $pbrequest->send();
+        $courseUpdater = new CourseUpdater();
+        $result = $courseUpdater->updateConnection($departure, $destination);
 
-        $dbupdater = new DBUpdater();
-        $result = $dbupdater->updateConnection($departure, $destination);
-
-        return new Response($result[0] . $result[1]);
+        return new Response(var_dump($result[0]));
     }
 
 }

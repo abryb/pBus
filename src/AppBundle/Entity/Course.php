@@ -42,21 +42,21 @@ class Course
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="Date", type="datetime")
+     * @ORM\Column(name="departure_date", type="datetime")
      */
-    private $date;
+    private $departureDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="travelTime", type="time")
+     * @ORM\Column(name="arrival_date", type="datetime")
      */
-    private $travelTime;
+    private $arrivalDate;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="price", type="integer")
+     * @ORM\Column(name="price", type="decimal", precision=6, scale=2, nullable=true)
      */
     private $price;
 
@@ -118,52 +118,6 @@ class Course
     }
 
     /**
-     * Set date
-     *
-     * @param \DateTime $date
-     * @return Course
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime 
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
-     * Set travelTime
-     *
-     * @param \DateTime $travelTime
-     * @return Course
-     */
-    public function setTravelTime($travelTime)
-    {
-        $this->travelTime = $travelTime;
-
-        return $this;
-    }
-
-    /**
-     * Get travelTime
-     *
-     * @return \DateTime 
-     */
-    public function getTravelTime()
-    {
-        return $this->travelTime;
-    }
-
-    /**
      * Set price
      *
      * @param integer $price
@@ -184,5 +138,51 @@ class Course
     public function getPrice()
     {
         return $this->price;
+    }
+
+    /**
+     * Set departureDate
+     *
+     * @param \DateTime $departureDate
+     * @return Course
+     */
+    public function setDepartureDate($departureDate)
+    {
+        $this->departureDate = $departureDate;
+
+        return $this;
+    }
+
+    /**
+     * Get departureDate
+     *
+     * @return \DateTime 
+     */
+    public function getDepartureDate()
+    {
+        return $this->departureDate;
+    }
+
+    /**
+     * Set arrivalDate
+     *
+     * @param \DateTime $arrivalDate
+     * @return Course
+     */
+    public function setArrivalDate($arrivalDate)
+    {
+        $this->arrivalDate = $arrivalDate;
+
+        return $this;
+    }
+
+    /**
+     * Get arrivalDate
+     *
+     * @return \DateTime 
+     */
+    public function getArrivalDate()
+    {
+        return $this->arrivalDate;
     }
 }

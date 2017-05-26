@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Util;
+namespace AppBundle\Util\PolskiBus;
 
 use \Curl\MultiCurl;
 use AppBundle\Entity\Station;
@@ -8,7 +8,7 @@ use AppBundle\Entity\Station;
 /*
  * This class is heavily dependent on www.polskibus.com
  */
-class PBRequest
+class RequestSender
 {
     const URL = 'https://booking.polskibus.com/Pricing/GetPrice';
     const DATE_FORMAT = 'd/m/Y';
@@ -20,7 +20,6 @@ class PBRequest
         'PricingForm.FromCity' => '%departureCode%', //eg '29'
         'PricingForm.ToCity' => '%destinationCode%', // eg '2'
         'PricingForm.OutDate' => '%Date%', //eg '24/06/2017'
-        'PricingForm.RetDate' => '%Date%',
     );
 
 
@@ -41,12 +40,12 @@ class PBRequest
 
 
     /**
-     * PBRequest constructor.
+     * RequestSender constructor.
      */
     public function __construct(Station $departure, Station $destination, $dates)
     {
         //create multi_curl and set url
-        $this->multi_curl = new MultiCurl(PBRequest::URL);
+        $this->multi_curl = new MultiCurl(RequestSender::URL);
         // setDeparture and setDestination also sets data departureCode and destinationCode
         $this->setDeparture($departure);
         $this->setDestination($destination);
@@ -82,7 +81,7 @@ class PBRequest
 
         // add curls to que
         foreach ($this->dates as $date) {
-            $this->setDate($date);
+            $this->setDataDate($date);
             $multi_curl->addPost($this->data, true);
         }
 
@@ -111,10 +110,9 @@ class PBRequest
     /**
      * @param \DateTime $date
      */
-    private function setDate(\DateTime $date)
+    private function setDataDate(\DateTime $date)
     {
-        $this->data['PricingForm.OutDate'] = $date->format(PBRequest::DATE_FORMAT);
-        $this->data['PricingForm.RetDate'] = $date->format(PBRequest::DATE_FORMAT);
+        $this->data['PricingForm.OutDate'] = $date->format(RequestSender::DATE_FORMAT);
     }
 
     /**
@@ -127,7 +125,7 @@ class PBRequest
 
     /**
      * @param \AppBundle\Entity\Station $departure
-     * @return PBRequest
+     * @return RequestSender
      */
     public function setDeparture($departure)
     {
@@ -146,7 +144,7 @@ class PBRequest
 
     /**
      * @param \AppBundle\Entity\Station $destination
-     * @return PBRequest
+     * @return RequestSender
      */
     public function setDestination($destination)
     {
