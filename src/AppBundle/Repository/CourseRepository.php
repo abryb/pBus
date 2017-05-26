@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class CourseRepository extends EntityRepository
 {
+    public function findLast()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT c FROM AppBundle:Course c 
+                     ORDER BY c.departureDate ASC'
+            )
+            ->getFirstResult();
+    }
 }

@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bazej
- * Date: 25.05.17
- * Time: 22:01
- */
 
 namespace AppBundle\Util\PolskiBus;
 
 use PHPHtmlParser\Dom;
-use AppBundle\Util\PolskiBus\CourseDataObtained;
 
 class ResponseParser
 {
@@ -28,16 +21,15 @@ class ResponseParser
 
     public function parse()
     {
-        $courseDataObtainedArray = [];
+        $courseDataArray = [];
         // 1. Select html with courses, to accelerate further process
         $response = $this->response;
         $courses = $this->selectCourses($response);
         foreach ($courses as $course) {
-            $courseDataObtainedArray[] = $this->createCourseData($course);
+            $courseDataArray[] = $this->createCourseData($course);
         }
 
-        return $courseDataObtainedArray;
-
+        return $courseDataArray;
     }
 
     private function selectCourses($response)
@@ -52,14 +44,13 @@ class ResponseParser
     {
         $dom = $this->dom;
         $course = $dom->load($course);
+        $courseData = new CourseData();
 
-        $courseDataObtained = new CourseDataObtained();
+        $courseData->setDepartureDate($this->findDepartureDate($course));
+        $courseData->setArrivalDate($this->findArrivalDate($course));
+        $courseData->setPrice($this->findPrice($course));
 
-        $courseDataObtained->setDepartureDate($this->findDepartureDate($course));
-        $courseDataObtained->setArrivalDate($this->findArrivalDate($course));
-        $courseDataObtained->setPrice($this->findPrice($course));
-
-        return $courseDataObtained;
+        return $courseData;
     }
 
     private function findDepartureDate(Dom $course)

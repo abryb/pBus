@@ -3,30 +3,45 @@
 namespace AppBundle\Util\PolskiBus;
 
 use AppBundle\Entity\Station;
+use AppBundle\Entity\Course;
 
 class CourseUpdater
 {
+    /**
+     * @var ResponseParser
+     */
     private $responseParser;
 
+    /**
+     * CourseUpdater constructor.
+     */
     public function __construct()
     {
         $this->responseParser = new ResponseParser();
     }
 
-    public function updateConnection(Station $departure, Station $destination)
+    /**
+     * @param Station $departure
+     * @param Station $destination
+     * @param $dates
+     * @return array
+     * Return array of CourseData objects
+     */
+    public function update(Station $departure, Station $destination, $dates)
     {
-        $dates = new \DateTime();
-        $dates->modify('+20 days');
+        // Create requestSender to www.polskibus.com
+        $requestSender = new RequestSender($departure, $destination, $dates);
+        // Send request
+        $responses = $requestSender->send();
 
-        $pbrequest = new RequestSender($departure, $destination, $dates);
-
-        $responses =  $pbrequest->send();
-
-        $courseDataObtainedArray = [];
+        // Array of CourseData objects to return
+        $courseDataArray = [];
         foreach ($responses as $response) {
-            $courseDataObtainedArray = $this->responseParser->setResponse($response)->parse();
+            // $parsedResponse is array of CourseData objects
+            $parsedResponse = $this->responseParser->setResponse($response)->parse();
+            // merge arrays, to avoid 2-dim arrays,  and always get 1-dimensional
+            $courseDataArray = array_merge($courseDataArray, $parsedResponse);
         }
-
-        return $courseDataObtainedArray;
+        return $courseDataArray;
     }
 }

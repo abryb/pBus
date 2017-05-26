@@ -11,10 +11,16 @@ use AppBundle\Entity\Station;
 class RequestSender
 {
     const URL = 'https://booking.polskibus.com/Pricing/GetPrice';
-    const DATE_FORMAT = 'd/m/Y';
+    const DATE_FORMAT = 'd/m/Y'; // format of date accept by site
 
+    /**
+     * @var MultiCurl
+     */
     private $multi_curl;
 
+    /**
+     * @var array
+     */
     private $data = array(
         'PricingForm.Adults' => '1',
         'PricingForm.FromCity' => '%departureCode%', //eg '29'
@@ -35,6 +41,7 @@ class RequestSender
 
     /**
      * @var array
+     * Array of DateTime objects
      */
     private $dates;
 
@@ -46,7 +53,6 @@ class RequestSender
     {
         //create multi_curl and set url
         $this->multi_curl = new MultiCurl(RequestSender::URL);
-        // setDeparture and setDestination also sets data departureCode and destinationCode
         $this->setDeparture($departure);
         $this->setDestination($destination);
         if (!is_array($dates)) {
@@ -56,18 +62,21 @@ class RequestSender
         }
     }
 
+    /**
+     * @return array
+     */
     public function send()
     {
         // result to return
-        $result = [];
+        $responses = [];
 
         // get multi_curl
         $multi_curl = $this->multi_curl;
         // set mutli_curl to follow, it's necessary because www.polskibus.com redirects with 303
         $multi_curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
-        // create succes function, runnin after single request
-        $multi_curl->success(function($instance) use (&$result) {
-            $result[] = $instance->response;
+        // create succes function, runnin after single request, put responses to array
+        $multi_curl->success(function($instance) use (&$responses) {
+            $responses[] = $instance->response;
         });
         // multi_curl error and complete comment out to remember
 //        $multi_curl->error(function($instance) {
@@ -79,16 +88,21 @@ class RequestSender
 //            echo 'call completed' . "\n";
 //        });
 
-        // add curls to que
+        // set values of post data: departure and arrival code
+        $this->setDepartureCode($this->departure);
+        $this->setDestinationCode($this->destination);
+        // add curls to queue
         foreach ($this->dates as $date) {
+            // set post data date
             $this->setDataDate($date);
+            // multi curl with second parameter 'true' - follow with post
             $multi_curl->addPost($this->data, true);
         }
 
         $multi_curl->start();
 
         // return array of results - htmlcode
-        return $result;
+        return $responses;
     }
 
     /**
@@ -130,7 +144,6 @@ class RequestSender
     public function setDeparture($departure)
     {
         $this->departure = $departure;
-        $this->setDepartureCode($departure);
         return $this;
     }
 
@@ -149,7 +162,6 @@ class RequestSender
     public function setDestination($destination)
     {
         $this->destination = $destination;
-        $this->setDestinationCode($destination);
         return $this;
     }
 }

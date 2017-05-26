@@ -8,22 +8,37 @@
 
 namespace AppBundle\Util\PolskiBus;
 
+use AppBundle\Entity\Station;
 
-
-class CourseDataObtained
+class CourseData
 {
+    /**
+     * @var \AppBundle\Entity\Station $departure;
+     */
     private $departure;
 
+    /**
+     * @var \AppBundle\Entity\Station $destination;
+     */
     private $destination;
 
+    /**
+     * @var \DateTime $departureDate
+     */
     private $departureDate;
 
+    /**
+     * @var \DateTime $arrivalDate
+     */
     private $arrivalDate;
 
+    /**
+     * @var float $price
+     */
     private $price;
 
     /**
-     * @return mixed
+     * @return Station
      */
     public function getDeparture()
     {
@@ -31,8 +46,8 @@ class CourseDataObtained
     }
 
     /**
-     * @param mixed $departure
-     * @return CourseDataObtained
+     * @param Station $departure
+     * @return CourseData
      */
     public function setDeparture($departure)
     {
@@ -41,7 +56,7 @@ class CourseDataObtained
     }
 
     /**
-     * @return mixed
+     * @return Station
      */
     public function getDestination()
     {
@@ -49,8 +64,8 @@ class CourseDataObtained
     }
 
     /**
-     * @param mixed $destination
-     * @return CourseDataObtained
+     * @param Station $destination
+     * @return CourseData
      */
     public function setDestination($destination)
     {
@@ -59,7 +74,7 @@ class CourseDataObtained
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getDepartureDate()
     {
@@ -67,8 +82,8 @@ class CourseDataObtained
     }
 
     /**
-     * @param mixed $departureDate
-     * @return CourseDataObtained
+     * @param \DateTime $departureDate
+     * @return CourseData
      */
     public function setDepartureDate($departureDate)
     {
@@ -77,7 +92,7 @@ class CourseDataObtained
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getArrivalDate()
     {
@@ -85,8 +100,8 @@ class CourseDataObtained
     }
 
     /**
-     * @param mixed $arrivalDate
-     * @return CourseDataObtained
+     * @param \DateTime $arrivalDate
+     * @return CourseData
      */
     public function setArrivalDate($arrivalDate)
     {
@@ -95,7 +110,7 @@ class CourseDataObtained
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getPrice()
     {
@@ -103,12 +118,13 @@ class CourseDataObtained
     }
 
     /**
-     * @param mixed $price
-     * @return CourseDataObtained
+     * @param float $price
+     * @return CourseData
      */
     public function setPrice($price)
     {
         $this->price = $price;
         return $this;
     }
+
 }
