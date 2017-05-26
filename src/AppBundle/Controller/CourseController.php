@@ -23,9 +23,9 @@ class CourseController extends Controller
         $departure = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 29]);
 
         $date = new \DateTime();
-        $date->modify('+20 days');
+        $date->modify('+200 days');
         $date2 = new \DateTime();
-        $date2->modify('+30 days');
+        $date2->modify('+300 days');
 
         $courseUpdater = new CourseUpdater();
         $result = $courseUpdater->update($departure, $destination, [$date, $date2]);
