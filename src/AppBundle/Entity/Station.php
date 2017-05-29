@@ -29,7 +29,7 @@ class Station
     private $name;
 
     /**
-     * @ORM\Column(name="code", type="integer")
+     * @ORM\Column(name="code", type="integer", unique=true)
      */
     private $code;
 

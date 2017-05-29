@@ -2,11 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Station;
 use AppBundle\Util\PolskiBus\Parser\StationParser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Util\PolskiBus\CourseUpdater;
+use AppBundle\Util\PolskiBus\PolskiBus;
 use AppBundle\Util\PolskiBus\RequestSender;
 use AppBundle\Util\PolskiBus\Parser\ResponseParser;
 
@@ -40,11 +41,11 @@ class CourseController extends Controller
     public function sAction()
     {
         $requestSender = new RequestSender();
-        $respons = $requestSender->checkStations();
+        $response = $requestSender->checkStations();
 
-        $responseParser = new ResponseParser($respons);
-        $parser = new StationParser();
-        $result = $parser->parse($respons);
+        $responseParser = new ResponseParser($response);
+        $responseParser->setParser(new StationParser());
+        $result = $responseParser->parse($response);
 
         return new Response(var_dump($result));
     }

@@ -5,9 +5,9 @@ namespace AppBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use AppBundle\Util\PolskiBus\CourseUpdater;
-use AppBundle\Entity\Course;
+use AppBundle\Util\PolskiBus\PolskiBus;
 use AppBundle\Entity\Station;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 class PolskiBusCommand extends ContainerAwareCommand
 {
@@ -17,9 +17,9 @@ class PolskiBusCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:pbus')
-            ->setDescription('')
-            ->setHelp('');
+            ->setName('app:station:create')
+            ->setDescription('Create station table in database')
+            ->setHelp('This command sends request to polskibus.com collect the data of stations and flush it to database');
     }
 
     /**
@@ -27,25 +27,23 @@ class PolskiBusCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln([
+            'Start',
+        ]);
+
         $em = $this->getContainer()->get('doctrine')->getManager();
 
-        $departure = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 29]);
-        $destination = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 2]);
+        $polskiBus = new PolskiBus();
+        $stationDataArray = $polskiBus->getStations();
+        $output->writeln('Response from polskibus obtained');
 
-        $date = new \DateTime();
-        $date->modify('+20 days');
-
-        $courseUpdater = new CourseUpdater();
-        $courseDataArray = $courseUpdater->update($departure, $destination, $date);
-        foreach ($courseDataArray as $courseData) {
-            $course = new Course();
-            $course->setDeparture($departure);
-            $course->setDestination($destination);
-            $course->setPrice($courseData->getPrice());
-            $course->setDepartureDate($courseData->getDepartureDate());
-            $course->setArrivalDate($courseData->getArrivalDate());
-            $em->persist($course);
-            $em->flush();
+        foreach ($stationDataArray as $stationData) {
+            $station = new Station();
+            $station->setName($stationData->getName());
+            $station->setCode($stationData->getCode());
+            $em->persist($station);
         }
+        $em->flush();
+        $output->writeln('Stations data create');
     }
 }
