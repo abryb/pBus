@@ -1,4 +1,3 @@
 pBus
 ====
-
-A Symfony project created on May 24, 2017, 7:02 pm.
+The purpose of this applicitation is easy finding tickets on www.polskibus.com. (www.pbus.cba.pl is something like beta test).
