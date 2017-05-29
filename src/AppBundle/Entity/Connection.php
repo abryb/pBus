@@ -22,24 +22,26 @@ class Connection
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Station")
-     * @ORM\JoinColumn(name="departure_code", referencedColumnName="code")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station")
+     * @ORM\JoinColumn(name="departure_id", referencedColumnName="id")
      */
     private $departure;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Station")
-     * @ORM\JoinColumn(name="destination_code", referencedColumnName="code")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station")
+     * @ORM\JoinColumn(name="destination_id", referencedColumnName="id")
      */
     private $destination;
 
     /**
      * @var \DateTime
+     * @ORM\Column(name="first_date", type="datetime")
      */
     private $firstDate;
 
     /**
      * @var \DateTime
+     * @ORM\Column(name="last_date", type="datetime")
      */
     private $lastDate;
 

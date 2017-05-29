@@ -7,9 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Util\PolskiBus\PolskiBus;
 use AppBundle\Entity\Station;
-use Symfony\Component\Security\Acl\Exception\Exception;
 
-class PolskiBusCommand extends ContainerAwareCommand
+class StationsCreateCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -17,7 +16,7 @@ class PolskiBusCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:station:create')
+            ->setName('app:stations:create')
             ->setDescription('Create station table in database')
             ->setHelp('This command sends request to polskibus.com collect the data of stations and flush it to database');
     }

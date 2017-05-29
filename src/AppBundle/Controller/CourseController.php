@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Station;
+use AppBundle\Entity\Connection;
 use AppBundle\Util\PolskiBus\Parser\ConnectionParser;
 use AppBundle\Util\PolskiBus\Parser\StationParser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -63,5 +63,31 @@ class CourseController extends Controller
         $result = $responseParser->parse($response);
 
         return new Response(var_dump($result));
+    }
+
+    /**
+     * @Route("/c/c");
+     */
+    public function ccAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('AppBundle:Station');
+
+        $polskiBus = new PolskiBus();
+        $connectionsDataArray = $polskiBus->getConnections();
+
+        foreach ($connectionsDataArray as $connectionData) {
+            $connection = new Connection();
+            $departure = $repository->findOneBy(['code' => $connectionData->getDeparture()]);
+            $connection->setDeparture($departure);
+            $destination = $repository->findOneBy(['code' => $connectionData->getDestination()]);
+            $connection->setDestination($destination);
+            $connection->setFirstDate($connectionData->getFirstDate());
+            $connection->setLastDate($connectionData->getLastDate());
+            $em->persist($connection);
+        }
+        $em->flush();
+
+        return new Response(var_dump('fofo'));
     }
 }
