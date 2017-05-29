@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: bazej
- * Date: 25.05.17
- * Time: 22:26
- */
 
-namespace AppBundle\Util\PolskiBus;
+namespace AppBundle\Util\PolskiBus\Data;
 
 use AppBundle\Entity\Station;
 

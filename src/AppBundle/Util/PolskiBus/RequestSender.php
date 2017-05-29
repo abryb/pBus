@@ -4,24 +4,21 @@ namespace AppBundle\Util\PolskiBus;
 
 use \Curl\MultiCurl;
 use AppBundle\Entity\Station;
-
+use \Curl\Curl;
 /*
  * This class is heavily dependent on www.polskibus.com
  */
 class RequestSender
 {
-    const URL = 'https://booking.polskibus.com/Pricing/GetPrice';
+    const URL_COURSE = 'https://booking.polskibus.com/Pricing/GetPrice';
+    const URL_CONNECTIONS = 'https://booking.polskibus.com/Pricing/SelectionsDynamic';
+    const URL_STATIONS = 'https://booking.polskibus.com/Pricing/SelectionsDynamic';
     const DATE_FORMAT = 'd/m/Y'; // format of date accept by site
-
-    /**
-     * @var MultiCurl
-     */
-    private $multi_curl;
 
     /**
      * @var array
      */
-    private $data = array(
+    private $courseData = array(
         'PricingForm.Adults' => '1',
         'PricingForm.FromCity' => '%departureCode%', //eg '29'
         'PricingForm.ToCity' => '%destinationCode%', // eg '2'
@@ -30,48 +27,25 @@ class RequestSender
 
 
     /**
-     * @var \AppBundle\Entity\Station $departure
-     */
-    private $departure;
-
-    /**
-     * @var \AppBundle\Entity\Station $destination
-     */
-    private $destination;
-
-    /**
-     * @var array
-     * Array of DateTime objects
-     */
-    private $dates;
-
-
-    /**
      * RequestSender constructor.
      */
-    public function __construct(Station $departure, Station $destination, $dates)
+    public function __construct()
     {
-        //create multi_curl and set url
-        $this->multi_curl = new MultiCurl(RequestSender::URL);
-        $this->setDeparture($departure);
-        $this->setDestination($destination);
-        if (!is_array($dates)) {
-            $this->dates = [$dates];
-        } else {
-            $this->dates = $dates;
-        }
+
     }
 
     /**
      * @return array
      */
-    public function send()
+    public function checkCourses(Station $departure, Station $destination, $dates)
     {
+        if (!is_array($dates)) {
+            $dates = [$dates];
+        }
         // result to return
         $responses = [];
 
-        // get multi_curl
-        $multi_curl = $this->multi_curl;
+        $multi_curl = new MultiCurl(self::URL_COURSE);
         // set mutli_curl to follow, it's necessary because www.polskibus.com redirects with 303
         $multi_curl->setOpt(CURLOPT_FOLLOWLOCATION, true);
         // create succes function, runnin after single request, put responses to array
@@ -88,15 +62,15 @@ class RequestSender
 //            echo 'call completed' . "\n";
 //        });
 
-        // set values of post data: departure and arrival code
-        $this->setDepartureCode($this->departure);
-        $this->setDestinationCode($this->destination);
+        // set values of post courseData: departure and arrival code
+        $this->setDepartureCode($departure);
+        $this->setDestinationCode($destination);
         // add curls to queue
-        foreach ($this->dates as $date) {
-            // set post data date
+        foreach ($dates as $date) {
+            // set post courseData date
             $this->setDataDate($date);
             // multi curl with second parameter 'true' - follow with post
-            $multi_curl->addPost($this->data, true);
+            $multi_curl->addPost($this->courseData, true);
         }
 
         $multi_curl->start();
@@ -105,12 +79,26 @@ class RequestSender
         return $responses;
     }
 
+    public function checkConnections()
+    {
+        $curl = new Curl();
+        $response = $curl->get(self::URL_CONNECTIONS);
+        return $response;
+    }
+
+    public function checkStations()
+    {
+        $curl = new Curl();
+        $response = $curl->get(self::URL_CONNECTIONS);
+        return $response;
+    }
+
     /**
      * @param Station $departure
      */
     private function setDepartureCode(Station $departure)
     {
-        $this->data['PricingForm.FromCity'] = $departure->getCode();
+        $this->courseData['PricingForm.FromCity'] = $departure->getCode();
     }
 
     /**
@@ -118,7 +106,7 @@ class RequestSender
      */
     private function setDestinationCode(Station $destination)
     {
-        $this->data['PricingForm.ToCity'] = $destination->getCode();
+        $this->courseData['PricingForm.ToCity'] = $destination->getCode();
     }
 
     /**
@@ -126,42 +114,6 @@ class RequestSender
      */
     private function setDataDate(\DateTime $date)
     {
-        $this->data['PricingForm.OutDate'] = $date->format(RequestSender::DATE_FORMAT);
-    }
-
-    /**
-     * @return \AppBundle\Entity\Station $departure
-     */
-    public function getDeparture()
-    {
-        return $this->departure;
-    }
-
-    /**
-     * @param \AppBundle\Entity\Station $departure
-     * @return RequestSender
-     */
-    public function setDeparture($departure)
-    {
-        $this->departure = $departure;
-        return $this;
-    }
-
-    /**
-     * @return \AppBundle\Entity\Station $destination
-     */
-    public function getDestination()
-    {
-        return $this->destination;
-    }
-
-    /**
-     * @param \AppBundle\Entity\Station $destination
-     * @return RequestSender
-     */
-    public function setDestination($destination)
-    {
-        $this->destination = $destination;
-        return $this;
+        $this->courseData['PricingForm.OutDate'] = $date->format(RequestSender::DATE_FORMAT);
     }
 }
