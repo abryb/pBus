@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Connection;
 use AppBundle\Util\PolskiBus\Parser\ConnectionParser;
+use AppBundle\Util\PolskiBus\Parser\CourseParser;
 use AppBundle\Util\PolskiBus\Parser\StationParser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,18 +20,12 @@ class CourseController extends Controller
      */
     public function indexAction()
     {
-        $requestSender = new RequestSender();
-        $result = $requestSender->checkConnections();
-        var_dump($result);
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Connection');
+        $connection = $repository->findOneBy(['departure' => 1574, 'destination' => 1571]);
 
-        $em = $this->getDoctrine()->getManager();
-        $departure = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 29]);
-        $destination = $em->getRepository('AppBundle:Station')->findOneBy(['code' => 2]);
+        $polskiBus = new PolskiBus();
+        $result = $polskiBus->getCourse($connection);
 
-        $date = new \DateTime();
-        $date->modify('+20 days');
-
-        $result = $requestSender->checkCourses($departure, $destination, $date);
         return new Response(var_dump($result));
     }
 
@@ -45,7 +39,7 @@ class CourseController extends Controller
 
         $responseParser = new ResponseParser($response);
         $responseParser->setParser(new ConnectionParser());
-        $result = $responseParser->parse($response);
+        $result = $responseParser->parse();
 
         return new Response(var_dump($result));
     }
@@ -60,34 +54,8 @@ class CourseController extends Controller
 
         $responseParser = new ResponseParser($response);
         $responseParser->setParser(new StationParser());
-        $result = $responseParser->parse($response);
+        $result = $responseParser->parse();
 
         return new Response(var_dump($result));
-    }
-
-    /**
-     * @Route("/c/c");
-     */
-    public function ccAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('AppBundle:Station');
-
-        $polskiBus = new PolskiBus();
-        $connectionsDataArray = $polskiBus->getConnections();
-
-        foreach ($connectionsDataArray as $connectionData) {
-            $connection = new Connection();
-            $departure = $repository->findOneBy(['code' => $connectionData->getDeparture()]);
-            $connection->setDeparture($departure);
-            $destination = $repository->findOneBy(['code' => $connectionData->getDestination()]);
-            $connection->setDestination($destination);
-            $connection->setFirstDate($connectionData->getFirstDate());
-            $connection->setLastDate($connectionData->getLastDate());
-            $em->persist($connection);
-        }
-        $em->flush();
-
-        return new Response(var_dump('fofo'));
     }
 }

@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Util\PolskiBus\PolskiBus;
-use AppBundle\Entity\Station;
+use AppBundle\Util\PolskiBus\Data\ConnectionData;
 
 class ConnectionsCreateCommand extends ContainerAwareCommand
 {

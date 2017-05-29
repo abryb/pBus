@@ -3,6 +3,7 @@
 namespace AppBundle\Util\PolskiBus\Parser;
 
 use PHPHtmlParser\Dom;
+use PHPHtmlParser\Dom\HtmlNode;
 use AppBundle\Util\PolskiBus\Data\CourseData;
 
 class CourseParser extends ParserAbstract
@@ -23,14 +24,12 @@ class CourseParser extends ParserAbstract
     {
         $dom = $this->dom;
         $dom->load($response);
-        $courses = $dom->find('#ResultsForm')->find('.onb_resultRow');
+        $courses = $dom->getElementById('ResultsForm')->find('.onb_resultRow');
         return $courses;
     }
 
     private function createCourseData($course)
     {
-        $dom = $this->dom;
-        $course = $dom->load($course);
         $courseData = new CourseData();
 
         $courseData->setDepartureDate($this->findDepartureDate($course));
@@ -40,7 +39,7 @@ class CourseParser extends ParserAbstract
         return $courseData;
     }
 
-    private function findDepartureDate(Dom $course)
+    private function findDepartureDate(HtmlNode $course)
     {
         $dateHtml = $course->find('.onb_two')->find('p')[0]->find('b')->text();
         preg_match('/([0-9][0-9: -.]+[0-9])/', $dateHtml, $matches);
@@ -49,7 +48,7 @@ class CourseParser extends ParserAbstract
         return $departureDate;
     }
 
-    private function findArrivalDate(Dom $course)
+    private function findArrivalDate(HtmlNode $course)
     {
         $dateHtml = $course->find('.onb_two')->find('p')[1]->find('b')->text();
         preg_match('/([0-9][0-9: -.]+[0-9])/', $dateHtml, $matches);
@@ -58,7 +57,7 @@ class CourseParser extends ParserAbstract
         return $arrivalDate;
     }
 
-    private function findPrice(Dom $course)
+    private function findPrice(HtmlNode $course)
     {
         $priceString = $course->find('.priceHilite')->text();
         preg_match('/([0-9.]+)/', $priceString, $matches);

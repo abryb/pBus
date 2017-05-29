@@ -4,7 +4,9 @@ namespace AppBundle\Util\PolskiBus;
 
 use \Curl\MultiCurl;
 use AppBundle\Entity\Station;
+use AppBundle\Entity\Connection;
 use \Curl\Curl;
+
 /*
  * This class is heavily dependent on www.polskibus.com
  */
@@ -37,11 +39,17 @@ class RequestSender
     /**
      * @return array
      */
-    public function checkCourses(Station $departure, Station $destination, $dates)
+    public function checkCourses(Connection $connection)
     {
-        if (!is_array($dates)) {
-            $dates = [$dates];
-        }
+        $departure = $connection->getDeparture();
+        $destination = $connection->getDestination();
+
+        $dates = new \DatePeriod(
+            $connection->getFirstDate(),
+            new \DateInterval('P1D'),
+            $connection->getLastDate()
+        );
+
         // result to return
         $responses = [];
 

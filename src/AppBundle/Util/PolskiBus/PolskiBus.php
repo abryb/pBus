@@ -4,9 +4,11 @@ namespace AppBundle\Util\PolskiBus;
 
 use AppBundle\Entity\Station;
 use AppBundle\Entity\Course;
+use AppBundle\Entity\Connection;
 use AppBundle\Util\PolskiBus\Parser\ConnectionParser;
 use AppBundle\Util\PolskiBus\Parser\ResponseParser;
 use AppBundle\Util\PolskiBus\Parser\StationParser;
+use AppBundle\Util\PolskiBus\Parser\CourseParser;
 
 class PolskiBus
 {
@@ -34,5 +36,16 @@ class PolskiBus
         $responseParser = new ResponseParser($reponse);
         $responseParser->setParser(new ConnectionParser());
         return $responseParser->parse();
+    }
+
+    public function getCourse(Connection $connection)
+    {
+        $responses = $this->requestSender->checkCourses($connection);
+        $result = [];
+        foreach ($responses as $response) {
+            $courseParser = new CourseParser();
+            $result = array_merge($result, $courseParser->parse($response));
+        }
+        return $result;
     }
 }
