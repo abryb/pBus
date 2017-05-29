@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Station;
+use AppBundle\Util\PolskiBus\Parser\ConnectionParser;
 use AppBundle\Util\PolskiBus\Parser\StationParser;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,7 +36,21 @@ class CourseController extends Controller
     }
 
     /**
-     *
+     * @Route("/c");
+     */
+    public function cAction()
+    {
+        $requestSender = new RequestSender();
+        $response = $requestSender->checkConnections();
+
+        $responseParser = new ResponseParser($response);
+        $responseParser->setParser(new ConnectionParser());
+        $result = $responseParser->parse($response);
+
+        return new Response(var_dump($result));
+    }
+
+    /**
      * @Route("/s");
      */
     public function sAction()

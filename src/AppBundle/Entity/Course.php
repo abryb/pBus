@@ -25,7 +25,7 @@ class Course
      * @var \AppBundle\Entity\Station $departure
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station", inversedBy="departures")
-     * @ORM\JoinColumn(name="departure_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="departure_code", referencedColumnName="code")
      */
     private $departure;
 
@@ -33,7 +33,7 @@ class Course
      * @var \AppBundle\Entity\Station $destination
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station", inversedBy="arrivals")
-     * @ORM\JoinColumn(name="destination_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="destination_code", referencedColumnName="code")
      */
     private $destination;
 
