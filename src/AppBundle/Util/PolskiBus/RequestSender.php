@@ -74,11 +74,14 @@ class RequestSender
         $this->setDepartureCode($departure);
         $this->setDestinationCode($destination);
         // add curls to queue
+        $counter = 0;
         foreach ($dates as $date) {
+            if ($counter == 5) break;
             // set post courseData date
             $this->setDataDate($date);
             // multi curl with second parameter 'true' - follow with post
             $multi_curl->addPost($this->courseData, true);
+            $counter++;
         }
 
         $multi_curl->start();

@@ -23,13 +23,13 @@ class Connection
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station")
-     * @ORM\JoinColumn(name="departure_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="departure_code", referencedColumnName="code", onDelete="CASCADE")
      */
     private $departure;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Station")
-     * @ORM\JoinColumn(name="destination_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="destination_code", referencedColumnName="code", onDelete="CASCADE")
      */
     private $destination;
 

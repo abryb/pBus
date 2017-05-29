@@ -13,15 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Station
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
@@ -30,6 +21,8 @@ class Station
 
     /**
      * @ORM\Column(name="code", type="integer", unique=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $code;
 
@@ -51,16 +44,6 @@ class Station
     {
         $this->departures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->arrivals = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -61,7 +61,8 @@ class CourseParser extends ParserAbstract
     {
         $priceString = $course->find('.priceHilite')->text();
         preg_match('/([0-9.]+)/', $priceString, $matches);
-        $price = $matches[0];
+        // coalescing operator
+        $price = $matches[0] ?? 999;
         return $price;
     }
 }

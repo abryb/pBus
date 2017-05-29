@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Course;
 use AppBundle\Util\PolskiBus\Parser\ConnectionParser;
 use AppBundle\Util\PolskiBus\Parser\CourseParser;
 use AppBundle\Util\PolskiBus\Parser\StationParser;
@@ -20,11 +21,22 @@ class CourseController extends Controller
      */
     public function indexAction()
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Connection');
-        $connection = $repository->findOneBy(['departure' => 1574, 'destination' => 1571]);
+        $em = $this->getDoctrine()->getManager();
+        $connection = $em->getRepository('AppBundle:Connection')->findOneBy(['departure' => 29, 'destination' => 2]);
+        var_dump($connection);
 
         $polskiBus = new PolskiBus();
-        $result = $polskiBus->getCourse($connection);
+        $result = $polskiBus->getCourses($connection);
+        foreach ($result as $courseData) {
+            $course = new Course();
+            $course->setDestination($connection->getDestination());
+            $course->setDeparture($connection->getDeparture());
+            $course->setDepartureDate($courseData->getDepartureDate());
+            $course->setArrivalDate($courseData->getArrivalDate());
+            $course->setPrice($courseData->getPrice());
+            $em->persist($course);
+        }
+        $em->flush();
 
         return new Response(var_dump($result));
     }

@@ -38,7 +38,7 @@ class PolskiBus
         return $responseParser->parse();
     }
 
-    public function getCourse(Connection $connection)
+    public function getCourses(Connection $connection)
     {
         $responses = $this->requestSender->checkCourses($connection);
         $result = [];
