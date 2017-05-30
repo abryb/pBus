@@ -19,11 +19,13 @@ class ConnectionParser extends ParserAbstract
         foreach ($connectionsStdClasses as $connectionsStdClass) {
             $connectionData = new ConnectionData();
             // StdClass property names are made by polskibus
+            // Save code of city
             $connectionData->setDeparture($connectionsStdClass->FromCityID);
             $connectionData->setDestination($connectionsStdClass->ToCityID);
-            // Create Date from format
+            // Create DateTime from format
             $lastDate = \DateTime::createFromFormat('d/m/Y', $connectionsStdClass->LastDate);
             $connectionData->setLastDate($lastDate);
+            // Put connectionData to array
             $connectionsDataArray[] = $connectionData;
         }
 

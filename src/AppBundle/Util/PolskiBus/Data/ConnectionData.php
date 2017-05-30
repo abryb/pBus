@@ -25,11 +25,6 @@ class ConnectionData
     /**
      * @var \DateTime
      */
-    private $firstDate;
-
-    /**
-     * @var \DateTime
-     */
     private $lastDate;
 
 
@@ -66,24 +61,6 @@ class ConnectionData
     public function setDestination($destination)
     {
         $this->destination = $destination;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getFirstDate()
-    {
-        return $this->firstDate;
-    }
-
-    /**
-     * @param \DateTime $firstDate
-     * @return ConnectionData
-     */
-    public function setFirstDate($firstDate)
-    {
-        $this->firstDate = $firstDate;
         return $this;
     }
 

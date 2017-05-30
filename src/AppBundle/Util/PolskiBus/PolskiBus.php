@@ -22,6 +22,10 @@ class PolskiBus
         $this->requestSender = new RequestSender();
     }
 
+    /**
+     * @return mixed
+     * Return array of stationData objects
+     */
     public function getStations()
     {
         $reponse = $this->requestSender->checkStations();
@@ -30,6 +34,10 @@ class PolskiBus
         return $responseParser->parse();
     }
 
+    /**
+     * @return mixed
+     * Return array of connectionData objects
+     */
     public function getConnections()
     {
         $reponse = $this->requestSender->checkConnections();
@@ -38,6 +46,11 @@ class PolskiBus
         return $responseParser->parse();
     }
 
+    /**
+     * @param Connection $connection
+     * @return array
+     * Return array of courseData objects
+     */
     public function getCourses(Connection $connection)
     {
         $responses = $this->requestSender->checkCourses($connection);
