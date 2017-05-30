@@ -44,7 +44,6 @@ class ConnectionsCreateCommand extends ContainerAwareCommand
             $connection->setDeparture($departure);
             $destination = $repository->findOneBy(['code' => $connectionData->getDestination()]);
             $connection->setDestination($destination);
-            $connection->setFirstDate($connectionData->getFirstDate());
             $connection->setLastDate($connectionData->getLastDate());
             $em->persist($connection);
         }

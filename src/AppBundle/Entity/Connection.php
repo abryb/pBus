@@ -35,34 +35,9 @@ class Connection
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="first_date", type="datetime")
-     */
-    private $firstDate;
-
-    /**
-     * @var \DateTime
      * @ORM\Column(name="last_date", type="datetime")
      */
     private $lastDate;
-
-
-    /**
-     * @return \DateTime
-     */
-    public function getFirstDate()
-    {
-        return $this->firstDate;
-    }
-
-    /**
-     * @param \DateTime $firstDate
-     * @return Connection
-     */
-    public function setFirstDate($firstDate)
-    {
-        $this->firstDate = $firstDate;
-        return $this;
-    }
 
     /**
      * @return \DateTime

@@ -22,8 +22,6 @@ class ConnectionParser extends ParserAbstract
             $connectionData->setDeparture($connectionsStdClass->FromCityID);
             $connectionData->setDestination($connectionsStdClass->ToCityID);
             // Create Date from format
-            $firstDate = \DateTime::createFromFormat('d/m/Y', $connectionsStdClass->FirstDate);
-            $connectionData->setFirstDate($firstDate);
             $lastDate = \DateTime::createFromFormat('d/m/Y', $connectionsStdClass->LastDate);
             $connectionData->setLastDate($lastDate);
             $connectionsDataArray[] = $connectionData;
