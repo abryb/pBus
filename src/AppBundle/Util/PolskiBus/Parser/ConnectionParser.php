@@ -20,8 +20,8 @@ class ConnectionParser extends ParserAbstract
             $connectionData = new ConnectionData();
             // StdClass property names are made by polskibus
             // Save code of city
-            $connectionData->setDeparture($connectionsStdClass->FromCityID);
-            $connectionData->setDestination($connectionsStdClass->ToCityID);
+            $connectionData->setDepartureCode($connectionsStdClass->FromCityID);
+            $connectionData->setDestinationCode($connectionsStdClass->ToCityID);
             // Create DateTime from format
             $lastDate = \DateTime::createFromFormat('d/m/Y', $connectionsStdClass->LastDate);
             $connectionData->setLastDate($lastDate);

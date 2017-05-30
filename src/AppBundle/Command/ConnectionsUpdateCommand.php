@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use AppBundle\Util\PolskiBus\PolskiBus;
 use AppBundle\Util\PolskiBus\Data\ConnectionData;
 
-class ConnectionsCreateCommand extends ContainerAwareCommand
+class ConnectionsUpdateCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class ConnectionsCreateCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('app:connections:create')
-            ->setDescription('')
+            ->setName('app:connections:update')
+            ->setDescription('Update connection data')
             ->setHelp('');
     }
 
@@ -32,22 +32,20 @@ class ConnectionsCreateCommand extends ContainerAwareCommand
         ]);
 
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $repository = $em->getRepository('AppBundle:Station');
+        $repository = $em->getRepository('AppBundle:Connection');
 
         $polskiBus = new PolskiBus();
         $connectionsDataArray = $polskiBus->getConnections();
         $output->writeln('Response from polskibus obtained');
 
         foreach ($connectionsDataArray as $connectionData) {
-            $connection = new Connection();
-            $departure = $repository->findOneBy(['code' => $connectionData->getDepartureCode()]);
-            $connection->setDeparture($departure);
-            $destination = $repository->findOneBy(['code' => $connectionData->getDestinationCode()]);
-            $connection->setDestination($destination);
+            $connection = $repository->findOneBy([
+                'departure' => $connectionData->getDepartureCode(),
+                'destination' => $connectionData->getDestinationCode()
+            ]);
             $connection->setLastDate($connectionData->getLastDate());
-            $em->persist($connection);
         }
         $em->flush();
-        $output->writeln('Connections data create');
+        $output->writeln('Connections data updated');
     }
 }

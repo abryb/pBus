@@ -13,14 +13,14 @@ use AppBundle\Entity\Station;
 class ConnectionData
 {
     /**
-     * @var Station $departure
+     * @var Station $departureCode
      */
-    private $departure;
+    private $departureCode;
 
     /**
-     * @var Station $destination
+     * @var Station $destinationCode
      */
-    private $destination;
+    private $destinationCode;
 
     /**
      * @var \DateTime
@@ -31,36 +31,36 @@ class ConnectionData
     /**
      * @return Station
      */
-    public function getDeparture()
+    public function getDepartureCode()
     {
-        return $this->departure;
+        return $this->departureCode;
     }
 
     /**
-     * @param Station $departure
+     * @param Station $departureCode
      * @return ConnectionData
      */
-    public function setDeparture($departure)
+    public function setDepartureCode($departureCode)
     {
-        $this->departure = $departure;
+        $this->departureCode = $departureCode;
         return $this;
     }
 
     /**
      * @return mixed
      */
-    public function getDestination()
+    public function getDestinationCode()
     {
-        return $this->destination;
+        return $this->destinationCode;
     }
 
     /**
-     * @param mixed $destination
+     * @param mixed $destinationCode
      * @return ConnectionData
      */
-    public function setDestination($destination)
+    public function setDestinationCode($destinationCode)
     {
-        $this->destination = $destination;
+        $this->destinationCode = $destinationCode;
         return $this;
     }
 

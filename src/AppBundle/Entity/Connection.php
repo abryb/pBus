@@ -37,7 +37,7 @@ class Connection
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="last_date", type="datetime")
+     * @ORM\Column(name="last_date", type="date")
      */
     private $lastDate;
 
