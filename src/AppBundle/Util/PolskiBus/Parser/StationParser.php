@@ -23,8 +23,8 @@ class StationParser extends ParserAbstract
     {
         $dom = $this->dom;
         $dom->load($response);
-        $stations = $dom->find('#PricingForm_FromCity')->find('option');
-        // unset first position, it-s empty option choice
+        $stations = $dom->getElementById('PricingForm_FromCity')->find('option');
+        // unset first position, it's empty option choice
         unset($stations[0]);
         return $stations;
     }

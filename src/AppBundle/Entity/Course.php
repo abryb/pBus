@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="course")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CourseRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Course
 {
@@ -57,6 +58,23 @@ class Course
      * @ORM\Column(name="price", type="decimal", precision=6, scale=2, nullable=true)
      */
     private $price;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+    }
 
 
     /**
@@ -182,5 +200,23 @@ class Course
     public function getArrivalDate()
     {
         return $this->arrivalDate;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param mixed $updatedAt
+     * @return Course
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
     }
 }

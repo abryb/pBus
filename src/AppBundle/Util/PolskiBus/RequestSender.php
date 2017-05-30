@@ -45,7 +45,7 @@ class RequestSender
         $destination = $connection->getDestination();
 
         $dates = new \DatePeriod(
-            $connection->getFirstDate(),
+            new \DateTime('now'),
             new \DateInterval('P1D'),
             $connection->getLastDate()
         );

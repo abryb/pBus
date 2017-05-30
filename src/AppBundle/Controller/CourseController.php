@@ -23,7 +23,6 @@ class CourseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $connection = $em->getRepository('AppBundle:Connection')->findOneBy(['departure' => 29, 'destination' => 2]);
-        var_dump($connection);
 
         $polskiBus = new PolskiBus();
         $result = $polskiBus->getCourses($connection);
