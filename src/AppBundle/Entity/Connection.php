@@ -3,12 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Util\PolskiBus\Data\ConnectionData;
 
 /**
  * Connection
  *
  * @ORM\Table(name="connection")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ConnectionRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Connection
 {
@@ -38,6 +40,30 @@ class Connection
      * @ORM\Column(name="last_date", type="datetime")
      */
     private $lastDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="is_tracked", type="boolean", nullable=true)
+     */
+    private $isTracked;
+
+
+    /**
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function updatedTimestamps()
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+    }
 
     /**
      * @return \DateTime
@@ -111,5 +137,46 @@ class Connection
     public function getDestination()
     {
         return $this->destination;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     * @return Connection
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * Set isTracked
+     *
+     * @param boolean $isTracked
+     * @return Connection
+     */
+    public function setIsTracked($isTracked)
+    {
+        $this->isTracked = $isTracked;
+
+        return $this;
+    }
+
+    /**
+     * Get isTracked
+     *
+     * @return boolean 
+     */
+    public function getIsTracked()
+    {
+        return $this->isTracked;
     }
 }

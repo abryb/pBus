@@ -76,7 +76,7 @@ class RequestSender
         // add curls to queue
         $counter = 0;
         foreach ($dates as $date) {
-            if ($counter == 5) break;
+            if ($counter == 20) break;
             // set post courseData date
             $this->setDataDate($date);
             // multi curl with second parameter 'true' - follow with post
