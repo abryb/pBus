@@ -39,16 +39,10 @@ class RequestSender
     /**
      * @return array
      */
-    public function checkCourses(Connection $connection)
+    public function checkCourses(Connection $connection, $dates)
     {
         $departure = $connection->getDeparture();
         $destination = $connection->getDestination();
-
-        $dates = new \DatePeriod(
-            new \DateTime('now'),
-            new \DateInterval('P1D'),
-            $connection->getLastDate()
-        );
 
         // result to return
         $responses = [];
@@ -74,14 +68,11 @@ class RequestSender
         $this->setDepartureCode($departure);
         $this->setDestinationCode($destination);
         // add curls to queue
-        $counter = 0;
         foreach ($dates as $date) {
-            if ($counter == 20) break;
             // set post courseData date
             $this->setDataDate($date);
             // multi curl with second parameter 'true' - follow with post
             $multi_curl->addPost($this->courseData, true);
-            $counter++;
         }
 
         $multi_curl->start();

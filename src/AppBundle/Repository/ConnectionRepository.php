@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConnectionRepository extends EntityRepository
 {
+    public function findTracked()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT c FROM AppBundle:Connection c 
+                     WHERE c.isTracked = true'
+            )
+            ->getResult();
+    }
 }

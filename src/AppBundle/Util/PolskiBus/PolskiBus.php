@@ -51,9 +51,9 @@ class PolskiBus
      * @return array
      * Return array of courseData objects
      */
-    public function getCourses(Connection $connection)
+    public function getCourses(Connection $connection, $dates)
     {
-        $responses = $this->requestSender->checkCourses($connection);
+        $responses = $this->requestSender->checkCourses($connection, $dates);
         $result = [];
         foreach ($responses as $response) {
             $courseParser = new CourseParser();
