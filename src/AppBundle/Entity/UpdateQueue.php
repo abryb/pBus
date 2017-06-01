@@ -4,12 +4,19 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Entity\Connection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * UpdateQueue
  *
  * @ORM\Table(name="update_queue")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UpdateQueueRepository")
+ * @UniqueEntity(
+ *     fields={"connection", "date"},
+ *     errorPath="date",
+ *     message="This port is already in use on that host."
+ * )
  */
 class UpdateQueue
 {

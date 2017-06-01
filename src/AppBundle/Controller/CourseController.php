@@ -25,7 +25,8 @@ class CourseController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $connections = $em->getRepository('AppBundle:Connection')->findTracked();
-        var_dump($connections);
+
+        $validator = $this->get('validator');
 
         foreach ($connections as $connection) {
             $dates = new \DatePeriod(
@@ -38,13 +39,16 @@ class CourseController extends Controller
                 $updateQueue = new UpdateQueue();
                 $updateQueue->setConnection($connection);
                 $updateQueue->setDate($date);
-                $em->persist($updateQueue);
+                $errors = $validator->validate($updateQueue);
+                if (count($errors) == 0) {
+                    $em->persist($updateQueue);
+                }
             }
         }
 
         $em->flush();
 
-        return new Response(var_dump($connections));
+        return new Response("<html><body><p>hoho</p></body></html>");
     }
 
     /**
